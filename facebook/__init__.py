@@ -254,7 +254,7 @@ class GraphAPI(object):
             raise GraphAPIError("API version number not available")
 
     def request(
-        self, path, args=None, post_args=None, files=None, method=None
+        self, path, args=None, post_args=None, files=None, method=None, headers=None
     ):
         """Fetches the given path in the Graph API.
 
@@ -299,6 +299,7 @@ class GraphAPI(object):
                 data=post_args,
                 proxies=self.proxies,
                 files=files,
+                headers=headers,
             )
         except requests.HTTPError as e:
             response = json.loads(e.read())
