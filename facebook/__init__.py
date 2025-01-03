@@ -283,10 +283,17 @@ class GraphAPI(object):
         if self.app_secret_hmac:
             _add_to_post_args_or_args("appsecret_proof", self.app_secret_hmac)
 
+        if path.startswith("http://") or path.startswith("https://"):
+            # path is a complete URL, use that instead of building from base url
+            request_url = path
+        else:
+            # path is a relative URL, build the complete URL
+            request_url = FACEBOOK_GRAPH_URL + path
+
         try:
             response = self.session.request(
                 method or "GET",
-                FACEBOOK_GRAPH_URL + path,
+                request_url,
                 timeout=self.timeout,
                 params=args,
                 data=post_args,
